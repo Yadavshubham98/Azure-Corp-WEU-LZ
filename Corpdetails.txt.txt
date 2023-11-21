@@ -1,1 +1,20 @@
 Object ID= 0725efb5-82a7-4568-89e9-fce6cf0572a6
+
+
+VNETS:
+
+corp-weu-prod-shared-management	10.251.0.0/23
+corp-weu-dev-shared-management	10.251.2.0/23
+corp-weu-prod-shared-identity	10.251.4.0/23
+corp-weu-dev-shared-identity	10.251.6.0/23
+corp-weu-prod-tis	10.251.8.0/22
+corp-weu-prod-tis	
+corp-weu-uat-tis	10.251.12.0/23
+corp-weu-dev-tis	10.251.14.0/23
+corp-weu-prod-tas	10.251.16.0/22
+corp-weu-prod-tas	
+corp-weu-uat-tas	10.251.20.0/23
+corp-weu-dev-tas	10.251.22.0/23
+
+corp-weu-shared-vWAN (v WAN) -  (89.0/24 & 88- Free)	10.251.88.0/23	23
+corp-weu-shared-internet (Zscaler vnet)	10.251.90.0/23	23
