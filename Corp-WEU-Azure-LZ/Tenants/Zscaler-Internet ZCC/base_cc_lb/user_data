@@ -1,0 +1,4 @@
+[ZSCALER]
+CC_URL=connector.zscalerthree.net/api/v1/provUrl?name=GENPACTAZUREPT
+AZURE_VAULT_URL=https://corpakvweupzcc01.vault.azure.net/
+HTTP_PROBE_PORT=50000

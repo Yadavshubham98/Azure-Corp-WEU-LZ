@@ -1,0 +1,27 @@
+Connect-AzAccount -Identity
+make sure have service enapint enblaed on vnets whichto  be addedfo  rstoerage accuonts.
+
+Set-AzContext -Subscription "13b43927-ae7e-47ce-9a4a-85da205ba210"
+$RESOURCE_GROUP_NAME = "corp-rg-weu-prod-shared-terraform"
+$STORAGE_ACCOUNT_NAME ="corpstorweupcoretf100"
+$ACCOUNT_KEY=(Get-AzStorageAccountKey -ResourceGroupName $RESOURCE_GROUP_NAME -Name $STORAGE_ACCOUNT_NAME)[0].value
+$env:ARM_ACCESS_KEY=$ACCOUNT_KEY
+`$env:ARM_ACCESS_KEY`
+
+terraform import azurerm_virtual_hub_connection.vhub-gch-weu-shared-internet /subscriptions/72452951-68DC-409E-9588-6F0A85306411/resourceGroups/gch-rg-eus-prod-shared-connectivity-core-network/providers/Microsoft.Network/virtualHubs/gch-vhub-weu-shared/hubVirtualNetworkConnections/gch-weu-shared-internet-connection
+
+terraform import azurerm_log_analytics_workspace.gch-la-weu-workspace /subscriptions/127a1a99-4e48-4b64-b7a2-4e351019163f/resourceGroups/gch-rg-weu-prod-shared-security-analytics-log/providers/Microsoft.OperationalInsights/workspaces/gch-la-weu-workspace
+---------------------------How to download backend terraform state file from storage account------------------------
+Select-AzSubscription -SubscriptionId 49368072-3593-442b-8508-34eb688e3b95
+$storageAccountKey = (Get-AzStorageAccountKey -ResourceGroupName 'gch-rg-eus-prod-shared-terraf
+orm' -AccountName "gchstoreuspcoretf100").Value[0]
+$containers = Get-AzStorageContainer -Context (New-AzStorageContext -StorageAccountName 'gchsto
+reuspcoretf100' -StorageAccountKey $storageAccountKey)
+$containers | Select Name
+$containerName= 'tfstate-container'
+ $blobs = Get-AzStorageBlob -Container $containerName -Context (New-AzStorageContext -StorageAcc
+ountName 'gchstoreuspcoretf100' -StorageAccountKey $storageAccountKey)
+ $blobs | Select Name
+ $blobName = "GchWestEurope-ZCCsetup.tfstate"
+ $destinationPath = "C:\Users\703269940\Downloads\"
+ Get-AzStorageBlobContent -Container $containerName -Blob $blobName -Context (New-AzStorageContext -StorageAccountName 'gchstoreuspcoretf100' -StorageAccountKey $storageAccountKey) -Destination $destinationPath -ssss
