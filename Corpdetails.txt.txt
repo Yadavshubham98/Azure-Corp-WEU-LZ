@@ -52,6 +52,8 @@ $secrets | ForEach-Object {
 }
 
 
+Old: corp-rg-eus-prod-mulesoft-01   - And Key Vault: corpakveusprodmulesoft01
+New: corp-rg-eus-prod-mulesoft-akv - And Key Vault: corpakveusptasmulesoft01
 
 
 
