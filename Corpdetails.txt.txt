@@ -18,3 +18,41 @@ corp-weu-dev-tas	10.251.22.0/23
 
 corp-weu-shared-vWAN (v WAN) -  (89.0/24 & 88- Free)	10.251.88.0/23	23
 corp-weu-shared-internet (Zscaler vnet)	10.251.90.0/23	23
+
+
+-------------------Migration vaults powershell commsnds------------------------------------------
+Connect-AzAccount
+Get-AzSubscription
+Set-AzContext -Subscription <id>
+
+
+
+$sourceVaultName = "corpakveusprodmulesoft01"
+$sourceResourceGroupName = "source-resource-group-name"
+
+$secrets | ForEach-Object {
+    $secret = Get-AzKeyVaultSecret -VaultName $sourceVaultName -Name $_.Name -ResourceGroupName $sourceResourceGroupName
+    $secretValue = $secret.SecretValueText
+    # Store the secret value wherever required (e.g., in a JSON or separate files)
+}
+
+
+
+$destinationVaultName = "destination-vault-name"
+$destinationResourceGroupName = "destination-resource-group-name"
+
+# Loop through the exported secrets and import them to the destination vault
+$secrets | ForEach-Object {
+    $secretName = $_.Name
+    $secretValue = $_.SecretValueText
+    $secretContentType = $_.ContentType  # Optional: To set the content type of the secret
+
+    # Add the secret to the destination vault
+    Set-AzKeyVaultSecret -VaultName $destinationVaultName -Name $secretName -SecretValue $secretValue -ContentType $secretContentType -ResourceGroupName $destinationResourceGroupName
+}
+
+
+
+
+
+
