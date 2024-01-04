@@ -1,0 +1,56 @@
+# Define the subscription ID and resource group
+$subscriptionId = "05a78749-1cf4-42f5-abfc-c778b2fc69c5"
+$resourceGroup = "Patanjali_RG"
+
+# Define the key vault names
+$keyVaultNames = @("AarthikKunjika", "PradesKunjika", "VyavhaarKunjika")
+
+# Get the current date and time
+$currentDateTime = Get-Date -Format "yyyyMMdd_HHmmss"
+
+# Create a folder based on the current date and time
+$folderName = "KeyVaultBackup_$currentDateTime"
+New-Item -ItemType Directory -Path $folderName | Out-Null
+
+# Loop through each key vault and download the keys, secrets, and certificates
+foreach ($keyVaultName in $keyVaultNames) {
+    # Get the key vault
+    $keyVault = Get-AzKeyVault -VaultName $keyVaultName -SubscriptionId $subscriptionId
+
+    # Get the keys from the key vault
+    $keyVaultKeys = Get-AzKeyVaultKey -VaultName $keyVault.VaultName
+
+    # Get the secrets from the key vault
+    $keyVaultSecrets = Get-AzKeyVaultSecret -VaultName $keyVault.VaultName
+
+    # Get the certificates from the key vault
+    $keyVaultCertificates = Get-AzKeyVaultCertificate -VaultName $keyVault.VaultName
+
+    # Create a folder for the key vault within the main folder
+    $keyVaultFolder = Join-Path -Path $folderName -ChildPath $keyVaultName
+    New-Item -ItemType Directory -Path $keyVaultFolder | Out-Null
+
+    # Download and save the keys
+    foreach ($key in $keyVaultKeys) {
+        $keyValue = Get-AzKeyVaultKey -VaultName $keyVault.VaultName -Name $key.Name -Version $key.Version
+        $keyFilePath = Join-Path -Path $keyVaultFolder -ChildPath "$($key.Name).txt"
+        $keyValue.KeyMaterial | Out-File -FilePath $keyFilePath
+    }
+
+    # Download and save the secrets
+    foreach ($secret in $keyVaultSecrets) {
+        $secretValue = Get-AzKeyVaultSecret -VaultName $keyVault.VaultName -Name $secret.Name -Version $secret.Version
+        $secretFilePath = Join-Path -Path $keyVaultFolder -ChildPath "$($secret.Name).txt"
+        $secretValue.SecretValue | Out-File -FilePath $secretFilePath
+    }
+
+    # Download and save the certificates
+    foreach ($certificate in $keyVaultCertificates) {
+        $certificateValue = Get-AzKeyVaultCertificate -VaultName $keyVault.VaultName -Name $certificate.Name -Version $certificate.Version
+        $certificateFilePath = Join-Path -Path $keyVaultFolder -ChildPath "$($certificate.Name).cer"
+        $certificateValue.Cer | Out-File -FilePath $certificateFilePath
+    }
+}
+
+# Output the backup folder path
+$folderName
