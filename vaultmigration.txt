@@ -3,6 +3,8 @@ $destsub = "3638e320-1580-4f66-8f37-5df5473b75ff"
 $sourcevault="corpakveusprodmulesoft01"
 $destvault= "corpakveusptasmulesoft01"
 
+$keyVaultSecrets = Get-AzKeyVaultSecret -VaultName "corpakveusprodmulesoft01" -AsplainText
+
 >> foreach ($secret in $keyVaultSecrets) {
 >>  Set-AzContext -Subscription $sourcesub
 >>  $secretvalue= Get-AzKeyVaultSecret -VaultName $sourcevault -Name $secret.Name -AsPlainText
